@@ -30,18 +30,22 @@ def get_files_by_commit_date(file_commit_times):
 if __name__ == '__main__':
     # repo_directory = input("请输入Git仓库的目录路径：")  # 从用户那里获取Git仓库的路径
     repo_directory = '/mnt/sda/github/10yue/openai-cookbook'
+    master = ['main', 'master'][0]
+    origin_repo_dir = 'https://github.com/openai/openai-cookbook.git'
+    prefix = origin_repo_dir.strip('.git') + '/blob/' + master + '/'
     file_commit_times = defaultdict(list)
 
     for file_path in get_all_files(repo_directory):
         rel_file_path = os.path.relpath(file_path, start=repo_directory)  # 获取相对于仓库根目录的文件路径
         commit_times = get_file_commit_times(repo_directory, rel_file_path)
         if commit_times:
-            file_commit_times[rel_file_path] = commit_times
+            file_commit_times[prefix+rel_file_path] = commit_times
 
     # 按照最近提交时间排序文件
     sorted_files = sorted(file_commit_times.items(), key=lambda x: x[1][0], reverse=True)
-
-    output_file = os.path.join(repo_directory, '本地提交历史-文件.py')
+    if not os.path.exists(repo_directory+'/history'):
+        os.makedirs(repo_directory+'/history')
+    output_file = os.path.join(repo_directory+'/history', '本地提交历史-文件json.py')
 
     with open(output_file, 'w', encoding='utf-8') as f:
         f.write('"""' + '\n')
@@ -53,7 +57,7 @@ if __name__ == '__main__':
     # 按照提交时间排序文件
     sorted_files = sorted(date_to_files.items(), key=lambda x: x[0], reverse=True)
 
-    output_file = os.path.join(repo_directory, '本地提交历史-时间.py')
+    output_file = os.path.join(repo_directory+'/history', '本地提交历史-时间json.py')
 
     with open(output_file, 'w', encoding='utf-8') as f:
         f.write('""""'+'\n')

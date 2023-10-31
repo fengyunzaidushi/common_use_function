@@ -61,7 +61,7 @@ if __name__ == "__main__":
     # 按照最近提交时间排序文件
     sorted_files = sorted(file_commit_times.items(), key=lambda x: x[1][0], reverse=True)
 
-    output_file = os.path.join(f'history', f'{repo_user}_{repo_name}_提交历史-文件.py')
+    output_file = os.path.join(f'history', f'{repo_user}_{repo_name}_提交历史-文件json.py')
     with open(output_file, 'w', encoding='utf-8') as f:
         f.write('"""' + '\n')
         json.dump(dict(sorted_files), f, ensure_ascii=False, indent=4)
@@ -73,7 +73,7 @@ if __name__ == "__main__":
     # 按照提交时间排序文件
     sorted_files = sorted(date_to_files.items(), key=lambda x: x[0], reverse=True)
 
-    output_file = os.path.join(f'history', f'{repo_user}_{repo_name}_提交历史-时间.py')
+    output_file = os.path.join(f'history', f'{repo_user}_{repo_name}_提交历史-时间json.py')
     # 写入到json文件
     with open(output_file, 'w', encoding='utf-8') as f:
         f.write('"""' + '\n')
