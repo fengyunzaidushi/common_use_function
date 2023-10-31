@@ -38,24 +38,25 @@ if __name__ == '__main__':
         if commit_times:
             file_commit_times[rel_file_path] = commit_times
 
+    # 按照最近提交时间排序文件
+    sorted_files = sorted(file_commit_times.items(), key=lambda x: x[1][0], reverse=True)
+
+    output_file = os.path.join(repo_directory, '本地提交历史-文件.py')
+
+    with open(output_file, 'w', encoding='utf-8') as f:
+        f.write('"""' + '\n')
+        json.dump(dict(sorted_files), f, ensure_ascii=False, indent=4)
+        f.write('"""' + '\n')
 
     # 按日期组织文件
     date_to_files = get_files_by_commit_date(file_commit_times)
     # 按照提交时间排序文件
     sorted_files = sorted(date_to_files.items(), key=lambda x: x[0], reverse=True)
 
-    output_file = os.path.join(repo_directory, '提交历史-时间.json')
+    output_file = os.path.join(repo_directory, '本地提交历史-时间.py')
 
     with open(output_file, 'w', encoding='utf-8') as f:
+        f.write('""""'+'\n')
         json.dump(dict(sorted_files), f, ensure_ascii=False, indent=4)
+        f.write('"""' + '\n')
 
-    # # 写入到txt文件
-    # with open(output_file, 'w', encoding='utf-8') as f:
-    #     for commit_time,file_paths in sorted_files:
-    #         print(f"时间：{commit_time}")
-    #         i = 0
-    #         line = {'time':commit_time}
-    #         for file in file_paths:
-    #             print(f"  - {file}")
-    #         line = {'time':commit_time,'file':f'{repo_directory}/blob/master/{file}'}
-    #         f.write(json.dumps(line, ensure_ascii=False) + '\n')

@@ -25,6 +25,8 @@ def get_file_commit_times(repo_user, repo_name, path=""):
 
     return [commit['commit']['author']['date'] for commit in commits]
 
+if not os.path.exists('history'):
+    os.makedirs('history')
 def get_files_by_commit_date(file_commit_times):
     date_to_files = defaultdict(list)
     for file_path, commit_times in file_commit_times.items():
@@ -48,7 +50,7 @@ if __name__ == "__main__":
         exit(1)
 
     file_commit_times = defaultdict(list)
-    prefix = repo_directory.srip('.git') + '/blob/' + master + '/'
+    prefix = repo_directory.strip('.git') + '/blob/' + master + '/'
     for entry in tree['tree']:
         if entry['type'] == 'blob':  # 只处理文件，不处理目录
             print(f"正在处理：{entry['path']} ...")
@@ -59,9 +61,11 @@ if __name__ == "__main__":
     # 按照最近提交时间排序文件
     sorted_files = sorted(file_commit_times.items(), key=lambda x: x[1][0], reverse=True)
 
-    output_file = os.path.join(f'history', f'{repo_user}_{repo_name}_提交历史-文件.json')
+    output_file = os.path.join(f'history', f'{repo_user}_{repo_name}_提交历史-文件.py')
     with open(output_file, 'w', encoding='utf-8') as f:
+        f.write('"""' + '\n')
         json.dump(dict(sorted_files), f, ensure_ascii=False, indent=4)
+        f.write('"""' + '\n')
 
 
     # 按日期组织文件
@@ -69,7 +73,9 @@ if __name__ == "__main__":
     # 按照提交时间排序文件
     sorted_files = sorted(date_to_files.items(), key=lambda x: x[0], reverse=True)
 
-    output_file = os.path.join(f'history', f'{repo_user}_{repo_name}_提交历史-时间.json')
+    output_file = os.path.join(f'history', f'{repo_user}_{repo_name}_提交历史-时间.py')
     # 写入到json文件
     with open(output_file, 'w', encoding='utf-8') as f:
+        f.write('"""' + '\n')
         json.dump(dict(sorted_files), f, ensure_ascii=False, indent=4)
+        f.write('"""' + '\n')
