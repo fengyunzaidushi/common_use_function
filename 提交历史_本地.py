@@ -27,11 +27,12 @@ def get_files_by_commit_date(file_commit_times):
             date_to_files[commit_time].append(file_path)
     return date_to_files
 
+
 if __name__ == '__main__':
     # repo_directory = input("请输入Git仓库的目录路径：")  # 从用户那里获取Git仓库的路径
-    repo_directory = '/mnt/sda/github/10yue/openai-cookbook'
-    master = ['main', 'master'][0]
-    origin_repo_dir = 'https://github.com/openai/openai-cookbook.git'
+    repo_directory = '/mnt/sda/github/8yue/gpt_academic'
+    master = ['main', 'master'][1]
+    origin_repo_dir = 'https://github.com/binary-husky/gpt_academic.git'
     prefix = origin_repo_dir.strip('.git') + '/blob/' + master + '/'
     file_commit_times = defaultdict(list)
 
