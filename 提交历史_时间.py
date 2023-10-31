@@ -1,7 +1,7 @@
 import os
 import subprocess
 from collections import defaultdict
-
+import json
 
 def get_all_files(directory='.'):
     for foldername, _, filenames in os.walk(directory):
@@ -44,12 +44,18 @@ if __name__ == '__main__':
     # 按照提交时间排序文件
     sorted_files = sorted(date_to_files.items(), key=lambda x: x[0], reverse=True)
 
-    output_file = os.path.join(repo_directory, '提交历史-时间.txt')
-    # 写入到txt文件
+    output_file = os.path.join(repo_directory, '提交历史-时间.json')
+
     with open(output_file, 'w', encoding='utf-8') as f:
-        for commit_time,file_paths in sorted_files:
-            print(f"时间：{commit_time}")
-            f.write(f"时间：{commit_time}\n")
-            for file in file_paths:
-                print(f"  - {file}")
-                f.write(f"  - {file}\n")
+        json.dump(dict(sorted_files), f, ensure_ascii=False, indent=4)
+
+    # # 写入到txt文件
+    # with open(output_file, 'w', encoding='utf-8') as f:
+    #     for commit_time,file_paths in sorted_files:
+    #         print(f"时间：{commit_time}")
+    #         i = 0
+    #         line = {'time':commit_time}
+    #         for file in file_paths:
+    #             print(f"  - {file}")
+    #         line = {'time':commit_time,'file':f'{repo_directory}/blob/master/{file}'}
+    #         f.write(json.dumps(line, ensure_ascii=False) + '\n')

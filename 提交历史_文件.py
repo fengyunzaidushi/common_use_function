@@ -1,4 +1,4 @@
-import os
+import os,json
 import subprocess
 from collections import defaultdict
 
@@ -41,12 +41,12 @@ if __name__ == '__main__':
     # 按照最近提交时间排序文件
     sorted_files = sorted(file_commit_times.items(), key=lambda x: x[1][0], reverse=True)
 
-    output_file = os.path.join(repo_directory, '提交历史-文件.txt')
-    # 写入到txt文件
+
+
+    output_file = os.path.join(repo_directory, '提交历史-文件.json')
+
+
     with open(output_file, 'w', encoding='utf-8') as f:
-        for file_path, commit_times in sorted_files:
-            print(f"{file_path} 的提交时间为：")
-            f.write(f"{file_path} 的提交时间为：\n")
-            for time in commit_times:
-                print(f"  - {time}")
-                f.write(f"  - {time}\n")
+        json.dump(dict(sorted_files), f, ensure_ascii=False, indent=4)
+
+
